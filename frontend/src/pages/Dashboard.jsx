@@ -3,10 +3,10 @@ import { useAuth } from '../context/AuthContext'
 import api from '../api/client'
 
 const semaforo = {
-  VENCIDO: { bg: '#fef2f2', color: '#dc2626', label: 'VENCIDO' },
-  URGENTE: { bg: '#fffbeb', color: '#d97706', label: 'URGENTE' },
-  PROXIMO: { bg: '#f0fdf4', color: '#16a34a', label: 'PRÓXIMO' },
-  PROGRAMADO: { bg: '#f5f5f4', color: '#888', label: 'PROGRAMADO' },
+  VENCIDO:    { color: '#e74c3c', borde: '#e74c3c', label: 'VENCIDO' },
+  URGENTE:    { color: '#e67e22', borde: '#e67e22', label: 'URGENTE' },
+  PROXIMO:    { color: '#7a9bb5', borde: '#2a4a7f', label: 'PRÓXIMO' },
+  PROGRAMADO: { color: '#3a5a7a', borde: '#1e3560', label: 'PROGRAMADO' },
 }
 
 export default function Dashboard() {
@@ -21,101 +21,125 @@ export default function Dashboard() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>Cargando...</div>
-  if (!data) return <div style={{ padding: '2rem', textAlign: 'center', color: '#dc2626' }}>Error al cargar datos</div>
+  if (loading) return <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--texto-secundario)' }}>Cargando...</div>
+  if (!data) return <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--rojo)' }}>Error al cargar datos</div>
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f5f5f4', fontFamily: 'system-ui, sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--azul)' }}>
+      <Navbar user={user} logout={logout} activo="inicio" />
 
-      <div style={{ background: 'white', borderBottom: '0.5px solid #e5e5e5', padding: '0 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '28px', height: '28px', background: '#dbeafe', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}>⚙</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-  <span style={{ fontSize: '15px', fontWeight: '500' }}>CMMS IMCLA-Volcán</span>
-  <a href="/cmms/activos" style={{ fontSize: '13px', color: '#1e40af', textDecoration: 'none' }}>Activos</a>
-</div>
+      <div style={{ background: '#0a1530', borderBottom: '1px solid var(--azul-borde)', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <p style={{ color: 'var(--rojo)', fontSize: '10px', letterSpacing: '3px', margin: '0 0 2px' }}>PANEL DE CONTROL</p>
+          <p style={{ color: 'var(--texto)', fontSize: '18px', margin: 0, fontWeight: 500 }}>Bienvenido, {user?.nombre}</p>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '13px', color: '#888' }}>{user?.nombre}</span>
-          <button onClick={logout} style={{ fontSize: '12px', color: '#888', background: 'none', border: '0.5px solid #e5e5e5', borderRadius: '6px', padding: '4px 10px', cursor: 'pointer' }}>Salir</button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ width: '7px', height: '7px', background: 'var(--verde)', borderRadius: '50%' }}></div>
+          <span style={{ color: '#4a9b6f', fontSize: '12px' }}>Sistema operativo</span>
+          <span style={{ color: 'var(--texto-tenue)', fontSize: '12px' }}>· Volcán S.R.L.</span>
         </div>
       </div>
 
-      <div style={{ padding: '1.5rem' }}>
+      <div style={{ padding: '20px 24px' }}>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '1.5rem' }}>
-          <MetricCard label="Total activos" value={data.activos.total} sub={`${data.activos.operativo} operativos`} subColor="#16a34a" />
-          <MetricCard label="OTs este mes" value={data.ots_mes.total} sub={`${data.ots_mes.completada} completadas`} subColor="#888" />
-          <MetricCard label="Alertas activas" value={data.alertas_sin_leer} sub={`${data.ots_sin_asignar} OTs sin asignar`} subColor={data.alertas_sin_leer > 0 ? '#d97706' : '#888'} />
-          <MetricCard label="Costo del mes" value={`Bs ${data.costo_mes_bs.toLocaleString()}`} sub="mano obra + repuestos" subColor="#888" />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '20px' }}>
+          <MetricCard label="TOTAL ACTIVOS" valor={data.activos.total} sub={`${data.activos.operativo} operativos`} subColor="var(--verde)" acento="var(--rojo)" />
+          <MetricCard label="ÓRDENES DE TRABAJO" valor={data.ots_mes.total} sub={`${data.ots_mes.completada} completadas este mes`} subColor="var(--texto-secundario)" acento="#2980b9" />
+          <MetricCard label="ALERTAS ACTIVAS" valor={data.alertas_sin_leer} sub={`${data.ots_sin_asignar} OTs sin asignar`} subColor={data.alertas_sin_leer > 0 ? 'var(--naranja)' : 'var(--texto-secundario)'} acento="var(--naranja)" />
+          <MetricCard label="COSTO DEL MES" valor={`${data.costo_mes_bs.toLocaleString()}`} sub="Bs · mano obra + repuestos" subColor="var(--texto-secundario)" acento="var(--verde)" />
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
 
-          <div style={{ background: 'white', border: '0.5px solid #e5e5e5', borderRadius: '12px', padding: '1rem 1.25rem' }}>
-            <p style={{ margin: '0 0 12px', fontSize: '14px', fontWeight: '500' }}>Próximos mantenimientos</p>
+          <div style={{ background: 'var(--azul-medio)', border: '1px solid var(--azul-borde)', borderRadius: '6px', padding: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+              <div style={{ width: '3px', height: '14px', background: 'var(--rojo)', borderRadius: '2px' }}></div>
+              <p style={{ margin: 0, fontSize: '10px', letterSpacing: '2px', color: 'var(--rojo)' }}>PRÓXIMOS MANTENIMIENTOS</p>
+            </div>
             {data.proximos_mantenimientos.length === 0
-              ? <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>Sin mantenimientos próximos</p>
+              ? <p style={{ fontSize: '13px', color: 'var(--texto-secundario)' }}>Sin mantenimientos próximos</p>
               : data.proximos_mantenimientos.map((m, i) => {
                 const s = semaforo[m.semaforo] || semaforo.PROGRAMADO
                 return (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px', borderRadius: '8px', background: s.bg, marginBottom: '6px' }}>
-                    <div>
-                      <p style={{ margin: 0, fontSize: '13px', fontWeight: '500', color: s.color }}>{m.codigo || m.activo} · {m.mantenimiento}</p>
-                      <p style={{ margin: '2px 0 0', fontSize: '11px', color: s.color }}>{m.dias_restantes < 0 ? `Vencido hace ${Math.abs(m.dias_restantes)} días` : `En ${m.dias_restantes} días`}</p>
+                  <div key={i} style={{ padding: '10px', background: 'var(--azul)', borderRadius: '4px', borderLeft: `3px solid ${s.borde}`, marginBottom: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <p style={{ margin: 0, fontSize: '13px', color: 'var(--texto)' }}>{m.codigo || m.activo} · {m.mantenimiento}</p>
+                        <p style={{ margin: '3px 0 0', fontSize: '11px', color: s.color }}>{m.dias_restantes < 0 ? `Vencido hace ${Math.abs(m.dias_restantes)} días` : `En ${m.dias_restantes} días`}</p>
+                      </div>
+                      <span style={{ fontSize: '10px', color: s.color, border: `1px solid ${s.borde}`, padding: '2px 8px', borderRadius: '3px', letterSpacing: '1px' }}>{s.label}</span>
                     </div>
-                    <span style={{ fontSize: '11px', color: s.color, border: `0.5px solid ${s.color}`, padding: '2px 8px', borderRadius: '6px' }}>{s.label}</span>
                   </div>
                 )
               })
             }
           </div>
 
-          <div style={{ background: 'white', border: '0.5px solid #e5e5e5', borderRadius: '12px', padding: '1rem 1.25rem' }}>
-            <p style={{ margin: '0 0 12px', fontSize: '14px', fontWeight: '500' }}>Alertas recientes</p>
+          <div style={{ background: 'var(--azul-medio)', border: '1px solid var(--azul-borde)', borderRadius: '6px', padding: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+              <div style={{ width: '3px', height: '14px', background: '#2980b9', borderRadius: '2px' }}></div>
+              <p style={{ margin: 0, fontSize: '10px', letterSpacing: '2px', color: '#2980b9' }}>ÓRDENES RECIENTES</p>
+            </div>
             {data.alertas.length === 0
-              ? <p style={{ fontSize: '13px', color: '#888', margin: 0 }}>Sin alertas activas</p>
+              ? <p style={{ fontSize: '13px', color: 'var(--texto-secundario)' }}>Sin alertas activas</p>
               : data.alertas.map((a, i) => (
-                <div key={i} style={{ padding: '8px 0', borderBottom: i < data.alertas.length - 1 ? '0.5px solid #e5e5e5' : 'none' }}>
-                  <p style={{ margin: 0, fontSize: '13px', color: '#111' }}>{a.titulo}</p>
-                  <p style={{ margin: '2px 0 0', fontSize: '11px', color: '#888' }}>{a.tipo} · {a.prioridad}</p>
+                <div key={i} style={{ borderBottom: i < data.alertas.length - 1 ? '1px solid var(--azul-borde)' : 'none', padding: '10px 0' }}>
+                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--texto)' }}>{a.titulo}</p>
+                  <p style={{ margin: '3px 0 0', fontSize: '11px', color: 'var(--texto-secundario)' }}>{a.tipo} · {a.prioridad}</p>
                 </div>
               ))
             }
           </div>
 
         </div>
-
-        <div style={{ background: 'white', border: '0.5px solid #e5e5e5', borderRadius: '12px', padding: '1rem 1.25rem' }}>
-          <p style={{ margin: '0 0 12px', fontSize: '14px', fontWeight: '500' }}>Estado de activos</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
-            <EstadoCard label="Operativos" value={data.activos.operativo} color="#16a34a" />
-            <EstadoCard label="En mantenimiento" value={data.activos.en_mantenimiento} color="#d97706" />
-            <EstadoCard label="Fuera de servicio" value={data.activos.fuera_de_servicio} color="#dc2626" />
-            <EstadoCard label="Dados de baja" value={data.activos.dado_de_baja} color="#888" />
-          </div>
-        </div>
-
       </div>
     </div>
   )
 }
 
-function MetricCard({ label, value, sub, subColor }) {
+function MetricCard({ label, valor, sub, subColor, acento }) {
   return (
-    <div style={{ background: 'white', border: '0.5px solid #e5e5e5', borderRadius: '10px', padding: '1rem' }}>
-      <p style={{ margin: '0 0 6px', fontSize: '12px', color: '#888' }}>{label}</p>
-      <p style={{ margin: '0 0 4px', fontSize: '24px', fontWeight: '500', color: '#111' }}>{value}</p>
-      <p style={{ margin: 0, fontSize: '11px', color: subColor }}>{sub}</p>
+    <div style={{ background: 'var(--azul-medio)', border: '1px solid var(--azul-borde)', borderTop: `3px solid ${acento}`, borderRadius: '6px', padding: '16px' }}>
+      <p style={{ margin: '0 0 8px', fontSize: '10px', letterSpacing: '2px', color: 'var(--texto-secundario)' }}>{label}</p>
+      <p style={{ margin: 0, fontSize: '30px', color: 'var(--texto)', fontWeight: 300 }}>{valor}</p>
+      <p style={{ margin: '6px 0 0', fontSize: '11px', color: subColor }}>{sub}</p>
     </div>
   )
 }
 
-function EstadoCard({ label, value, color }) {
+export function Navbar({ user, logout, activo }) {
+  const links = [
+    { href: '/cmms/', label: 'Inicio', key: 'inicio' },
+    { href: '/cmms/activos', label: 'Activos', key: 'activos' },
+    { href: '/cmms/mantenimientos', label: 'Mantenimientos', key: 'mantenimientos' },
+    { href: '/cmms/alertas', label: 'Alertas', key: 'alertas' },
+    { href: '/cmms/reportes', label: 'Reportes', key: 'reportes' },
+  ]
   return (
-    <div style={{ textAlign: 'center', padding: '12px', background: '#f5f5f4', borderRadius: '8px' }}>
-      <p style={{ margin: '0 0 4px', fontSize: '22px', fontWeight: '500', color }}>{value}</p>
-      <p style={{ margin: 0, fontSize: '11px', color: '#888' }}>{label}</p>
+    <div style={{ background: 'var(--azul)', borderBottom: '1px solid var(--azul-borde)', padding: '0 24px', height: '56px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ width: '8px', height: '8px', background: 'var(--rojo)', borderRadius: '50%' }}></div>
+          <span style={{ color: 'var(--texto)', fontSize: '14px', fontWeight: 700, letterSpacing: '1px' }}>CMMS</span>
+          <span style={{ color: 'var(--azul-borde)', fontSize: '14px' }}>|</span>
+          <span style={{ color: 'var(--texto-secundario)', fontSize: '11px', letterSpacing: '1px' }}>IMCLA · VOLCÁN</span>
+        </div>
+        <div style={{ display: 'flex', gap: '2px', marginLeft: '12px' }}>
+          {links.map(l => (
+            <a key={l.key} href={l.href} style={{ color: activo === l.key ? 'var(--texto)' : 'var(--texto-secundario)', fontSize: '12px', padding: '6px 14px', borderRadius: '4px', background: activo === l.key ? 'var(--rojo)' : 'transparent', fontWeight: activo === l.key ? 600 : 400 }}>
+              {l.label}
+            </a>
+          ))}
+        </div>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ width: '6px', height: '6px', background: 'var(--verde)', borderRadius: '50%' }}></div>
+        <span style={{ color: 'var(--texto-secundario)', fontSize: '12px' }}>{user?.nombre}</span>
+        <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: 'var(--rojo)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', color: 'var(--texto)', fontWeight: 700 }}>
+          {user?.nombre?.charAt(0)}{user?.apellido?.charAt(0) || ''}
+        </div>
+        <button onClick={logout} style={{ fontSize: '11px', color: 'var(--texto-secundario)', background: 'none', border: '1px solid var(--azul-borde)', padding: '4px 10px' }}>Salir</button>
+      </div>
     </div>
   )
 }

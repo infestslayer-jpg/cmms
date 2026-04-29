@@ -25,45 +25,66 @@ export default function Login() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f4' }}>
-      <div style={{ background: 'white', borderRadius: '12px', border: '0.5px solid #e5e5e5', padding: '2rem', width: '100%', maxWidth: '380px' }}>
-        <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-          <h1 style={{ margin: '0 0 4px', fontSize: '20px', fontWeight: '500' }}>CMMS IMCLA-Volcán</h1>
-          <p style={{ margin: 0, fontSize: '13px', color: '#888' }}>Sistema de gestión de mantenimiento</p>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--azul)' }}>
+
+      <div style={{ width: '100%', maxWidth: '380px', padding: '0 20px' }}>
+
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+            <div style={{ width: '10px', height: '10px', background: 'var(--rojo)', borderRadius: '50%' }}></div>
+            <span style={{ color: 'var(--texto)', fontSize: '22px', fontWeight: 700, letterSpacing: '2px' }}>CMMS</span>
+            <div style={{ width: '10px', height: '10px', background: 'var(--rojo)', borderRadius: '50%' }}></div>
+          </div>
+          <p style={{ color: 'var(--texto-secundario)', fontSize: '12px', letterSpacing: '2px', margin: 0 }}>IMCLA · VOLCÁN S.R.L.</p>
+          <p style={{ color: 'var(--texto-tenue)', fontSize: '11px', margin: '6px 0 0' }}>Sistema de gestión de mantenimiento</p>
         </div>
 
-        {error && (
-          <div style={{ background: '#fef2f2', border: '0.5px solid #fca5a5', borderRadius: '8px', padding: '10px 12px', marginBottom: '1rem', fontSize: '13px', color: '#dc2626' }}>
-            {error}
-          </div>
-        )}
+        <div style={{ background: 'var(--azul-medio)', border: '1px solid var(--azul-borde)', borderTop: '3px solid var(--rojo)', borderRadius: '6px', padding: '28px' }}>
 
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', fontSize: '13px', color: '#555', marginBottom: '6px' }}>Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              style={{ width: '100%', boxSizing: 'border-box' }}
-              placeholder="admin@imcla.bo"
-            />
-          </div>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', fontSize: '13px', color: '#555', marginBottom: '6px' }}>Contraseña</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              style={{ width: '100%', boxSizing: 'border-box' }}
-            />
-          </div>
-          <button type="submit" disabled={loading} style={{ width: '100%', padding: '10px', background: '#1e40af', color: 'white', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '500', cursor: 'pointer' }}>
-            {loading ? 'Ingresando...' : 'Ingresar'}
-          </button>
-        </form>
+          <p style={{ color: 'var(--rojo)', fontSize: '10px', letterSpacing: '3px', margin: '0 0 20px' }}>ACCESO AL SISTEMA</p>
+
+          {error && (
+            <div style={{ background: '#2a1010', border: '1px solid #e74c3c', borderRadius: '4px', padding: '10px 14px', marginBottom: '16px', fontSize: '13px', color: '#e74c3c' }}>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: '14px' }}>
+              <label style={{ display: 'block', fontSize: '10px', color: 'var(--texto-secundario)', letterSpacing: '1px', marginBottom: '6px' }}>CORREO ELECTRÓNICO</label>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                style={{ width: '100%' }}
+                placeholder="usuario@empresa.bo"
+              />
+            </div>
+
+            <div style={{ marginBottom: '24px' }}>
+              <label style={{ display: 'block', fontSize: '10px', color: 'var(--texto-secundario)', letterSpacing: '1px', marginBottom: '6px' }}>CONTRASEÑA</label>
+              <input
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                style={{ width: '100%' }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              style={{ width: '100%', padding: '11px', background: 'var(--rojo)', color: 'white', border: 'none', fontWeight: 700, fontSize: '13px', letterSpacing: '1px' }}>
+              {loading ? 'VERIFICANDO...' : 'INGRESAR AL SISTEMA'}
+            </button>
+          </form>
+        </div>
+
+        <p style={{ textAlign: 'center', color: 'var(--texto-tenue)', fontSize: '11px', marginTop: '20px' }}>
+          Estación de Servicios Volcán S.R.L.
+        </p>
       </div>
     </div>
   )
